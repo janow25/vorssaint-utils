@@ -25,6 +25,7 @@ struct KeepAwakeAutomationStrings {
     let automationCaptionAll: String
     let agentsToggle: String
     let agentsActive: String
+    let agentsIdleEndsIn: String // + remaining
     let agentsGraceTitle: String
     let agentsUnavailable: String
 
@@ -190,6 +191,7 @@ extension KeepAwakeAutomationStrings {
         automationCaptionAll: "Starts only when every selected condition is active.",
         agentsToggle: "AI Agents",
         agentsActive: "Active while an AI agent is working",
+        agentsIdleEndsIn: "Agents idle - ends in",
         agentsGraceTitle: "Stay awake after agents stop",
         agentsUnavailable: "Turn on AI Agents in the Dynamic Island settings so Keep Awake can see when an agent works."
     )
@@ -216,6 +218,7 @@ extension KeepAwakeAutomationStrings {
         automationCaptionAll: "Inicia somente quando todas as condições selecionadas estiverem ativas.",
         agentsToggle: "AI Agents",
         agentsActive: "Ativo enquanto um agente de IA estiver trabalhando",
+        agentsIdleEndsIn: "Agentes ociosos - termina em",
         agentsGraceTitle: "Manter ativo depois que os agentes pararem",
         agentsUnavailable: "Ative AI Agents nos ajustes da Dynamic Island para o Keep Awake ver quando um agente trabalha."
     )
@@ -242,6 +245,7 @@ extension KeepAwakeAutomationStrings {
         automationCaptionAll: "Yalnızca seçili tüm koşullar etkinken başlar.",
         agentsToggle: "AI Agents",
         agentsActive: "Bir yapay zekâ ajanı çalışırken etkin",
+        agentsIdleEndsIn: "Ajanlar boşta - kalan",
         agentsGraceTitle: "Ajanlar durduktan sonra uyanık kal",
         agentsUnavailable: "Keep Awake’in bir ajanın çalıştığını görebilmesi için Dynamic Island ayarlarında AI Agents’ı açın."
     )
@@ -268,6 +272,7 @@ extension KeepAwakeAutomationStrings {
         automationCaptionAll: "Запускается только когда активны все выбранные условия.",
         agentsToggle: "AI Agents",
         agentsActive: "Активно, пока работает ИИ-агент",
+        agentsIdleEndsIn: "Агенты простаивают - осталось",
         agentsGraceTitle: "Не засыпать после остановки агентов",
         agentsUnavailable: "Включите AI Agents в настройках Dynamic Island, чтобы Keep Awake видел работу агента."
     )
@@ -294,6 +299,7 @@ extension KeepAwakeAutomationStrings {
         automationCaptionAll: "Se activa solo cuando todas las condiciones seleccionadas están activas.",
         agentsToggle: "AI Agents",
         agentsActive: "Activo mientras un agente de IA trabaja",
+        agentsIdleEndsIn: "Agentes inactivos - termina en",
         agentsGraceTitle: "Mantener activo tras detenerse los agentes",
         agentsUnavailable: "Activa AI Agents en los ajustes de la Dynamic Island para que Keep Awake vea cuándo trabaja un agente."
     )
@@ -320,6 +326,7 @@ extension KeepAwakeAutomationStrings {
         automationCaptionAll: "Spustí sa iba vtedy, keď sú aktívne všetky vybrané podmienky.",
         agentsToggle: "AI Agents",
         agentsActive: "Aktívne, kým pracuje agent AI",
+        agentsIdleEndsIn: "Agenti nečinní - skončí o",
         agentsGraceTitle: "Zostať hore po zastavení agentov",
         agentsUnavailable: "Zapnite AI Agents v nastaveniach Dynamic Island, aby Keep Awake videl, kedy agent pracuje."
     )
@@ -346,6 +353,7 @@ extension KeepAwakeAutomationStrings {
         automationCaptionAll: "Startet nur, wenn alle ausgewählten Bedingungen erfüllt sind.",
         agentsToggle: "AI Agents",
         agentsActive: "Aktiv, solange ein KI-Agent arbeitet",
+        agentsIdleEndsIn: "Agenten im Leerlauf - endet in",
         agentsGraceTitle: "Nach dem Ende der Agenten wach bleiben",
         agentsUnavailable: "Aktiviere AI Agents in den Einstellungen der Dynamic Island, damit Keep Awake sieht, wann ein Agent arbeitet."
     )
@@ -372,6 +380,7 @@ extension KeepAwakeAutomationStrings {
         automationCaptionAll: "Démarre uniquement lorsque toutes les conditions sélectionnées sont actives.",
         agentsToggle: "AI Agents",
         agentsActive: "Actif pendant qu’un agent IA travaille",
+        agentsIdleEndsIn: "Agents inactifs - se termine dans",
         agentsGraceTitle: "Rester éveillé après l’arrêt des agents",
         agentsUnavailable: "Activez AI Agents dans les réglages de la Dynamic Island pour que Keep Awake voie quand un agent travaille."
     )
@@ -398,6 +407,7 @@ extension KeepAwakeAutomationStrings {
         automationCaptionAll: "Si avvia solo quando tutte le condizioni selezionate sono attive.",
         agentsToggle: "AI Agents",
         agentsActive: "Attivo mentre un agente IA lavora",
+        agentsIdleEndsIn: "Agenti inattivi - termina tra",
         agentsGraceTitle: "Resta attivo dopo l’arresto degli agenti",
         agentsUnavailable: "Attiva AI Agents nelle impostazioni della Dynamic Island così Keep Awake vede quando un agente lavora."
     )
@@ -424,6 +434,7 @@ extension KeepAwakeAutomationStrings {
         automationCaptionAll: "選択したすべての条件が満たされているときだけ開始します。",
         agentsToggle: "AI Agents",
         agentsActive: "AIエージェントの作業中に有効",
+        agentsIdleEndsIn: "エージェント待機中 - 残り",
         agentsGraceTitle: "エージェント停止後もスリープさせない時間",
         agentsUnavailable: "Keep Awakeがエージェントの作業を検知できるよう、Dynamic IslandのAI Agentsをオンにしてください。"
     )
@@ -450,6 +461,7 @@ extension KeepAwakeAutomationStrings {
         automationCaptionAll: "선택한 모든 조건이 충족될 때만 시작합니다.",
         agentsToggle: "AI Agents",
         agentsActive: "AI 에이전트 작업 중에 활성",
+        agentsIdleEndsIn: "에이전트 대기 중 - 남은 시간",
         agentsGraceTitle: "에이전트 중지 후에도 깨어 있는 시간",
         agentsUnavailable: "Keep Awake가 에이전트 작업을 감지하도록 Dynamic Island 설정에서 AI Agents를 켜세요."
     )
@@ -476,6 +488,7 @@ extension KeepAwakeAutomationStrings {
         automationCaptionAll: "仅当所有选定条件都满足时才启动。",
         agentsToggle: "AI Agents",
         agentsActive: "AI 智能体工作时启用",
+        agentsIdleEndsIn: "智能体空闲 - 剩余",
         agentsGraceTitle: "智能体停止后继续保持唤醒",
         agentsUnavailable: "请在灵动岛设置中开启 AI Agents,Keep Awake 才能看到智能体何时工作。"
     )
@@ -502,6 +515,7 @@ extension KeepAwakeAutomationStrings {
         automationCaptionAll: "僅當所有選定條件都符合時才啟動。",
         agentsToggle: "AI Agents",
         agentsActive: "AI 代理工作時啟用",
+        agentsIdleEndsIn: "代理閒置 - 剩餘",
         agentsGraceTitle: "代理停止後繼續保持喚醒",
         agentsUnavailable: "請在動態島設定中開啟 AI Agents,Keep Awake 才能看到代理何時工作。"
     )
@@ -528,6 +542,7 @@ extension KeepAwakeAutomationStrings {
         automationCaptionAll: "只有當所有已選條件都符合時才啟動。",
         agentsToggle: "AI Agents",
         agentsActive: "AI 代理工作時啟用",
+        agentsIdleEndsIn: "代理閒置 - 剩餘",
         agentsGraceTitle: "代理停止後繼續保持喚醒",
         agentsUnavailable: "請在動態島設定中開啟 AI Agents,Keep Awake 才能看到代理何時工作。"
     )
@@ -553,6 +568,7 @@ extension KeepAwakeAutomationStrings {
         automationCaptionAll: "Запускається лише коли всі обрані умови активні.",
         agentsToggle: "AI Agents",
         agentsActive: "Активно, поки працює ШІ-агент",
+        agentsIdleEndsIn: "Агенти простоюють - залишилось",
         agentsGraceTitle: "Не засинати після зупинки агентів",
         agentsUnavailable: "Увімкніть AI Agents у налаштуваннях Dynamic Island, щоб Keep Awake бачив роботу агента."
     )

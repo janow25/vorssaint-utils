@@ -21,6 +21,9 @@ final class KeepAwakeManager: ObservableObject {
     @Published private(set) var isActive = false
     @Published private(set) var endDate: Date? // nil = indefinite
     @Published private(set) var sessionTrigger: SessionTrigger?
+    /// An automatic session held only by the grace period after the AI agents
+    /// stopped. `endDate` then counts down to the end of that period.
+    @Published private(set) var agentsIdle = false
     /// The preset a manual session started from; nil for an end time or automation.
     @Published private(set) var sessionMinutes: Int?
     @Published private(set) var runningAppBundleIDs: [String] = []
@@ -87,6 +90,8 @@ final class KeepAwakeManager: ObservableObject {
     private var agentGraceWorkItem: DispatchWorkItem?
     /// When an AI agent last showed as working; nil until one does.
     private var agentLastWorking: Date?
+    /// When the last agent work ends the grace period; set while it alone holds.
+    private var agentGraceEnd: Date?
     private var automationEvaluationWorkItem: DispatchWorkItem?
     private var lastExternalDisplayConnected: Bool?
     private var screenLocked = false
@@ -279,6 +284,7 @@ final class KeepAwakeManager: ObservableObject {
         sessionTrigger = trigger
         if trigger == .manual {
             activeAutomationConditions.removeAll()
+            agentsIdle = false
         }
         isActive = true
         if let end {
@@ -303,7 +309,7 @@ final class KeepAwakeManager: ObservableObject {
     }
 
     func extend(minutes: Int) {
-        guard isActive, let current = endDate else { return }
+        guard isActive, sessionTrigger == .manual, let current = endDate else { return }
         let newEnd = max(current, Date()).addingTimeInterval(TimeInterval(minutes) * 60)
         endDate = newEnd
         scheduleEnd(at: newEnd)
@@ -323,6 +329,7 @@ final class KeepAwakeManager: ObservableObject {
         releaseAssertions()
         sessionTrigger = nil
         sessionMinutes = nil
+        agentsIdle = false
         activeAutomationConditions.removeAll()
         isActive = false
         sessionPausedForScreenLock = false
@@ -421,7 +428,7 @@ final class KeepAwakeManager: ObservableObject {
         }
 
         sessionPausedForScreenLock = false
-        if let endDate, endDate <= Date() {
+        if sessionTrigger != .automation, let endDate, endDate <= Date() {
             if !continueAutomaticallyAfterTimerIfNeeded() { deactivate(reason: .timer) }
             return
         }
@@ -521,6 +528,7 @@ final class KeepAwakeManager: ObservableObject {
     private func agentWorkHolds() -> Bool {
         agentGraceWorkItem?.cancel()
         agentGraceWorkItem = nil
+        agentGraceEnd = nil
         let defaults = UserDefaults.standard
         guard defaults.bool(forKey: DefaultsKey.keepAwakeAgentsWorking),
               KeepAwakeAgentWork.isAvailable(in: defaults) else { return false }
@@ -533,6 +541,7 @@ final class KeepAwakeManager: ObservableObject {
             defaults.integer(forKey: DefaultsKey.keepAwakeAgentsGrace))) * 60
         let holds = KeepAwakeAutomationSupport.agentWorkHolds(
             working: working, lastWorking: agentLastWorking, now: now, grace: grace)
+        agentGraceEnd = holds && !working ? agentLastWorking?.addingTimeInterval(grace) : nil
 
         if holds, !working, let last = agentLastWorking {
             let work = DispatchWorkItem { [weak self] in
@@ -615,6 +624,20 @@ final class KeepAwakeManager: ObservableObject {
             activate(end: nil, trigger: .automation)
         case .deactivate:
             deactivate(reason: .manual)
+        }
+        syncAgentIdleDisplay(matching: matches)
+    }
+
+    /// Shows the remaining grace period like a timed session while the agents
+    /// alone hold the automatic session and none of them works any more.
+    private func syncAgentIdleDisplay(matching matches: Set<KeepAwakeAutomationCondition>) {
+        guard isActive, sessionTrigger == .automation else { return }
+        if matches == [.agentsWorking], let graceEnd = agentGraceEnd {
+            agentsIdle = true
+            if endDate != graceEnd { endDate = graceEnd }
+        } else if agentsIdle {
+            agentsIdle = false
+            endDate = nil
         }
     }
 

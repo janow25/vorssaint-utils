@@ -2729,7 +2729,7 @@ struct KeepAwakeCard: View {
         PanelSection(.keepAwake, title: l10n.s.keepAwakeTitle, collapsible: collapsible) {
             VStack(alignment: .leading, spacing: 10) {
                 HStack {
-                    if awake.isActive, awake.endDate != nil {
+                    if awake.isActive, awake.sessionTrigger != .automation, awake.endDate != nil {
                         // Beside the extend chips a narrow panel has no room for the
                         // status; the highlighted chip already shows the countdown
                         // or the end time.
@@ -3001,7 +3001,11 @@ struct KeepAwakeCard: View {
     private var statusLine: some View {
         Group {
             if awake.isActive {
-                if awake.sessionTrigger == .automation {
+                if awake.sessionTrigger == .automation, awake.agentsIdle, let end = awake.endDate {
+                    TimelineView(.periodic(from: .now, by: 1)) { _ in
+                        Text("\(automationStrings.agentsIdleEndsIn) \(Self.remainingText(until: end))")
+                    }
+                } else if awake.sessionTrigger == .automation {
                     Text(automationStrings.activeStatus(for: awake.activeAutomationConditions))
                 } else if let end = awake.endDate {
                     TimelineView(.periodic(from: .now, by: 1)) { _ in
