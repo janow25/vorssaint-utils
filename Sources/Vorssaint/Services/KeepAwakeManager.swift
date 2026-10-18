@@ -500,8 +500,13 @@ final class KeepAwakeManager: ObservableObject {
                 .map(KeepAwakeAgentWork.isWorking)
                 .removeDuplicates()
                 .receive(on: DispatchQueue.main)
-                .sink { [weak self] _ in
-                    self?.scheduleAutomationEvaluation(after: 0.1)
+                .sink { [weak self] working in
+                    guard let self else { return }
+                    // The grace period runs from when the work ends. A long
+                    // run is evaluated only when it starts, so the last
+                    // evaluation would date it from the start instead.
+                    if working || self.agentLastWorking != nil { self.agentLastWorking = Date() }
+                    self.scheduleAutomationEvaluation(after: 0.1)
                 }
         } else {
             agentObservation = nil
